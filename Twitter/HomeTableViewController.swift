@@ -15,13 +15,14 @@ class HomeTableViewController: UITableViewController {
     var numOfTweet: Int!
     
     let myRefreshControl = UIRefreshControl()
+    @IBOutlet var tweetTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadTweets()
-        
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
-        tableView.refreshControl = myRefreshControl
+        self.tweetTable.refreshControl = myRefreshControl
+//        self.tweetTable.rowHeight = UITableView.automaticDimension
+//        self.tweetTable.estimatedRowHeight = 150
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -29,31 +30,38 @@ class HomeTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
+    }
+    
     @objc func loadTweets(){
-        numOfTweet = 10
+        numOfTweet = 20
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let myParam = ["count":numOfTweet]
-        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParam, success: { (tweets: [NSDictionary]) in
+        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParam as [String : Any], success: { (tweets: [NSDictionary]) in
             for tweet in tweets{
                 self.tweetArray.append(tweet)
             }
-            self.tableView.reloadData()
+            self.tweetTable.reloadData()
             self.myRefreshControl.endRefreshing()
+            print("loading more")
         }, failure: { (Error) in
             print("Could not retrieve tweets")
         })
     }
     
     func loadMoreTweet(){
-        numOfTweet = numOfTweet + 10
+        numOfTweet = numOfTweet + 20
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let myParam = ["count":numOfTweet]
-        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParam, success: { (tweets: [NSDictionary]) in
+        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParam as [String : Any], success: { (tweets: [NSDictionary]) in
             for tweet in tweets{
                 self.tweetArray.append(tweet)
             }
-            self.tableView.reloadData()
+            self.tweetTable.reloadData()
             self.myRefreshControl.endRefreshing()
+            print("loading more")
         }, failure: { (Error) in
             print("Could not retrieve tweets")
         })
@@ -83,7 +91,7 @@ class HomeTableViewController: UITableViewController {
         cell.tweetLable.text = tweetArray[indexPath.row]["text"] as? String
         
         let imageUrl = URL(string: (user["profile_image_url_https"] as? String)!)
-        let data = try? Data(contentsOf: imageUrl!)
+        //let data = try? Data(contentsOf: imageUrl!)
         
         cell.profileImageView.af_setImage(withURL: imageUrl!)
         // Configure the cell...
