@@ -21,8 +21,8 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         self.tweetTable.refreshControl = myRefreshControl
-//        self.tweetTable.rowHeight = UITableView.automaticDimension
-//        self.tweetTable.estimatedRowHeight = 150
+        self.tweetTable.rowHeight = UITableView.automaticDimension
+        self.tweetTable.estimatedRowHeight = 150
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -92,7 +92,10 @@ class HomeTableViewController: UITableViewController {
         
         let imageUrl = URL(string: (user["profile_image_url_https"] as? String)!)
         //let data = try? Data(contentsOf: imageUrl!)
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
         
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool )
+        cell.tweetID = tweetArray[indexPath.row]["id"] as! Int
         cell.profileImageView.af_setImage(withURL: imageUrl!)
         // Configure the cell...
         return cell
