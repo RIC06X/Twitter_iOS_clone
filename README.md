@@ -23,6 +23,8 @@ The following **bonus** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 
+<img src='https://i.imgur.com/Md22ytX.gif' title='Login'/>
+
 ---
 
 # Twitter - Part I
