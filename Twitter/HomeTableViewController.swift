@@ -40,6 +40,7 @@ class HomeTableViewController: UITableViewController {
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let myParam = ["count":numOfTweet]
         TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParam as [String : Any], success: { (tweets: [NSDictionary]) in
+            self.tweetArray.removeAll()
             for tweet in tweets{
                 self.tweetArray.append(tweet)
             }
